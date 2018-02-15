@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<bean id="businessService" class="ex.aaronfae.spring.ch5.BusinessService"></bean>
+	<bean id="myAspect" class="ex.aaronfae.spring.ch5.MyAspect"></bean>
+
+	<aop:config>
+		<aop:aspect id="myaspect" ref="myAspect">
+			<aop:pointcut expression="execution(public * *(..))" id="dataAccessOperation" />
+			<aop:before method="monitor" pointcut-ref="dataAccessOperation" />
+			<aop:after-returning method="doAccessCheck"
+				pointcut-ref="dataAccessOperation" />
+			<aop:after-throwing method="doRecoveryActions"
+				pointcut-ref="dataAccessOperation" />
+			<aop:after method="doReleaseLock" pointcut-ref="dataAccessOperation" />
+		</aop:aspect>
+	</aop:config>
+
+</beans>
